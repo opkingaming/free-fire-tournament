@@ -1,0 +1,32 @@
+<%- include('../partials/header') %>
+
+<section style="padding-top:32px;">
+  <h2>Players</h2>
+  <% const active = 'users' %>
+  <%- include('../partials/admin-nav') %>
+
+  <% if (users.length === 0) { %>
+    <p class="section-sub">No players registered yet.</p>
+  <% } else { %>
+    <table>
+      <thead><tr><th>Username</th><th>Joined</th><th>Coins</th><th>Adjust</th></tr></thead>
+      <tbody>
+        <% users.forEach(u => { %>
+          <tr>
+            <td><%= u.username %></td>
+            <td><%= new Date(u.createdAt).toLocaleDateString() %></td>
+            <td><%= u.coins %></td>
+            <td>
+              <form method="POST" action="/admin/users/<%= u.id %>/adjust-coins" class="inline-form">
+                <input type="number" name="amount" placeholder="+10 or -10" style="width:110px;">
+                <button class="btn btn-ghost btn-small" type="submit">Apply</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

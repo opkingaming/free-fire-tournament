@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof pageTitle !== 'undefined' ? pageTitle + ' — ' + siteName : siteName %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a href="/" class="brand">NEXUS <span>OG</span></a>
+      <div class="nav-links">
+        <a href="/tournaments">Custom Rooms</a>
+        <% if (currentUser) { %>
+          <a href="/deposit">Deposit</a>
+          <a href="/withdraw">Withdraw</a>
+          <a href="/my-rooms">My Rooms</a>
+          <a href="/dashboard">Dashboard</a>
+          <span class="coin-pill"><%= currentUser.coins %> coins</span>
+          <form action="/logout" method="POST" style="display:inline;">
+            <button class="btn btn-ghost btn-small" type="submit">Log out</button>
+          </form>
+        <% } else { %>
+          <a href="/login">Log in</a>
+          <a href="/register" class="btn btn-primary btn-small">Sign up</a>
+        <% } %>
+      </div>
+    </div>
+  </header>
+  <main class="wrap">

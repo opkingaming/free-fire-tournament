@@ -1,0 +1,64 @@
+<%- include('partials/header') %>
+
+<section style="padding-top:32px;">
+  <h2>Withdraw coins</h2>
+  <p class="section-sub">Turn your coins back into real money. Once approved, we send the payout to the account you provide below.</p>
+
+  <div class="stat-grid" style="margin-bottom:10px;">
+    <div class="stat-card">
+      <div class="stat-num"><%= user.coins %></div>
+      <div class="stat-label">Coins available</div>
+    </div>
+  </div>
+</section>
+
+<section class="form-card wide" style="margin:0 0 40px;">
+  <% if (error) { %><div class="alert alert-error"><%= error %></div><% } %>
+  <% if (success) { %><div class="alert alert-success"><%= success %></div><% } %>
+
+  <form method="POST" action="/withdraw">
+    <label for="coins">Coins to withdraw</label>
+    <input type="number" id="coins" name="coins" min="1" step="1" max="<%= user.coins %>" required>
+    <div class="field-note">Coins are held immediately and refunded automatically if your request is rejected.</div>
+
+    <label for="method">Send payout via</label>
+    <select id="method" name="method" required>
+      <option value="">Select one</option>
+      <option value="JazzCash">JazzCash</option>
+      <option value="SadaPay">SadaPay</option>
+      <option value="Bank Transfer">Bank transfer</option>
+    </select>
+
+    <label for="accountNumber">Account number / IBAN</label>
+    <input type="text" id="accountNumber" name="accountNumber" placeholder="03xx-xxxxxxx or PKxx..." required>
+
+    <label for="accountName">Account holder name (optional)</label>
+    <input type="text" id="accountName" name="accountName">
+
+    <button class="btn btn-primary btn-block" type="submit" style="margin-top:22px;">Request withdrawal</button>
+  </form>
+</section>
+
+<section style="padding-top:0;">
+  <h3>Your withdrawal history</h3>
+  <% if (myWithdrawals.length === 0) { %>
+    <p class="section-sub">No withdrawal requests yet.</p>
+  <% } else { %>
+    <table>
+      <thead><tr><th>Date</th><th>Coins</th><th>Method</th><th>Account</th><th>Status</th></tr></thead>
+      <tbody>
+        <% myWithdrawals.forEach(w => { %>
+          <tr>
+            <td><%= new Date(w.createdAt).toLocaleString() %></td>
+            <td><%= w.coins %></td>
+            <td><%= w.method %></td>
+            <td><%= w.accountNumber %></td>
+            <td><span class="status-tag status-<%= w.status %>"><%= w.status %></span></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>

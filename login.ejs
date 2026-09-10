@@ -1,0 +1,17 @@
+<%- include('../partials/header') %>
+
+<div class="auth-card">
+  <h2>Admin login</h2>
+  <% if (error) { %><div class="alert alert-error"><%= error %></div><% } %>
+  <form method="POST" action="/admin/login">
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" required autofocus>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required>
+
+    <button class="btn btn-primary btn-block" type="submit" style="margin-top:22px;">Log in</button>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

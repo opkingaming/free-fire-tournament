@@ -1,0 +1,36 @@
+<%- include('../partials/header') %>
+
+<section style="padding-top:32px;">
+  <h2>Admin dashboard</h2>
+  <% const active = 'dashboard' %>
+  <%- include('../partials/admin-nav') %>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-num"><%= stats.totalUsers %></div>
+      <div class="stat-label">Registered players</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num"><%= stats.pendingDeposits %></div>
+      <div class="stat-label">Deposits awaiting review</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num"><%= stats.pendingWithdrawals %></div>
+      <div class="stat-label">Withdrawals awaiting review</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num"><%= stats.totalRooms %></div>
+      <div class="stat-label">Rooms created</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num"><%= stats.totalCoinsIssued %></div>
+      <div class="stat-label">Coins issued total</div>
+    </div>
+  </div>
+
+  <a href="/admin/deposits?status=pending" class="btn btn-primary">Review pending deposits</a>
+  <a href="/admin/withdrawals?status=pending" class="btn btn-primary">Review pending withdrawals</a>
+  <a href="/admin/rooms" class="btn btn-ghost">Manage rooms</a>
+</section>
+
+<%- include('../partials/footer') %>

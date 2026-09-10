@@ -1,0 +1,51 @@
+<%- include('../partials/header') %>
+
+<section style="padding-top:32px;">
+  <h2>Withdrawals</h2>
+  <% const active = 'withdrawals' %>
+  <%- include('../partials/admin-nav') %>
+
+  <div class="filters">
+    <a href="/admin/withdrawals?status=pending" class="<%= filter === 'pending' ? 'active' : '' %>">Pending</a>
+    <a href="/admin/withdrawals?status=approved" class="<%= filter === 'approved' ? 'active' : '' %>">Approved</a>
+    <a href="/admin/withdrawals?status=rejected" class="<%= filter === 'rejected' ? 'active' : '' %>">Rejected</a>
+    <a href="/admin/withdrawals?status=all" class="<%= filter === 'all' ? 'active' : '' %>">All</a>
+  </div>
+
+  <% if (withdrawals.length === 0) { %>
+    <p class="section-sub">Nothing here.</p>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr><th>Date</th><th>Player</th><th>Coins</th><th>Method</th><th>Account</th><th>Holder</th><th>Status</th><th></th></tr>
+      </thead>
+      <tbody>
+        <% withdrawals.forEach(w => { %>
+          <tr>
+            <td><%= new Date(w.createdAt).toLocaleString() %></td>
+            <td><%= w.username %></td>
+            <td><%= w.coins %></td>
+            <td><%= w.method %></td>
+            <td><%= w.accountNumber %></td>
+            <td><%= w.accountName || '—' %></td>
+            <td><span class="status-tag status-<%= w.status %>"><%= w.status %></span></td>
+            <td>
+              <% if (w.status === 'pending') { %>
+                <div class="inline-form">
+                  <form method="POST" action="/admin/withdrawals/<%= w.id %>/approve">
+                    <button class="btn btn-primary btn-small" type="submit">Mark paid</button>
+                  </form>
+                  <form method="POST" action="/admin/withdrawals/<%= w.id %>/reject">
+                    <button class="btn btn-danger btn-small" type="submit">Reject &amp; refund</button>
+                  </form>
+                </div>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

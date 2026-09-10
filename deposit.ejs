@@ -1,0 +1,70 @@
+<%- include('partials/header') %>
+
+<section style="padding-top:32px;">
+  <h2>Deposit coins</h2>
+  <p class="section-sub">1 rupee = <%= payment.coinRate %> coin<%= payment.coinRate === 1 ? '' : 's' %>. Send the amount below, then upload your screenshot — coins are added after we verify the payment.</p>
+
+  <div class="pay-methods">
+    <div class="pay-method">
+      <div class="label">JazzCash</div>
+      <div class="number"><%= payment.jazzcashNumber %></div>
+      <div class="name">Account name: <%= payment.jazzcashName %></div>
+    </div>
+    <div class="pay-method">
+      <div class="label">SadaPay (IBAN)</div>
+      <div class="number" style="font-size:16px;"><%= payment.sadapayIban %></div>
+      <div class="name">Account name: <%= payment.sadapayName %></div>
+    </div>
+  </div>
+</section>
+
+<section class="form-card wide" style="margin:0 0 40px;">
+  <% if (error) { %><div class="alert alert-error"><%= error %></div><% } %>
+  <% if (success) { %><div class="alert alert-success"><%= success %></div><% } %>
+
+  <form method="POST" action="/deposit" enctype="multipart/form-data">
+    <label for="method">Payment method used</label>
+    <select id="method" name="method" required>
+      <option value="">Select one</option>
+      <option value="JazzCash">JazzCash</option>
+      <option value="SadaPay">SadaPay</option>
+    </select>
+
+    <label for="amount">Amount sent (Rs)</label>
+    <input type="number" id="amount" name="amount" min="1" step="1" required>
+
+    <label for="senderNumber">Your number you sent from (optional, helps us match it faster)</label>
+    <input type="text" id="senderNumber" name="senderNumber" placeholder="03xx-xxxxxxx">
+
+    <label for="screenshot">Payment screenshot</label>
+    <input type="file" id="screenshot" name="screenshot" accept="image/*" required>
+    <div class="field-note">JPG, PNG or WEBP, up to 5MB.</div>
+
+    <button class="btn btn-primary btn-block" type="submit" style="margin-top:22px;">Submit deposit</button>
+  </form>
+</section>
+
+<section style="padding-top:0;">
+  <h3>Your deposit history</h3>
+  <% if (myDeposits.length === 0) { %>
+    <p class="section-sub">You haven't submitted any deposits yet.</p>
+  <% } else { %>
+    <table>
+      <thead><tr><th>Date</th><th>Screenshot</th><th>Amount</th><th>Coins</th><th>Method</th><th>Status</th></tr></thead>
+      <tbody>
+        <% myDeposits.forEach(d => { %>
+          <tr>
+            <td><%= new Date(d.createdAt).toLocaleString() %></td>
+            <td><a class="thumb-link" href="<%= d.screenshot %>" target="_blank"><img src="<%= d.screenshot %>" alt="Payment screenshot"></a></td>
+            <td>Rs <%= d.amount %></td>
+            <td><%= d.coins %></td>
+            <td><%= d.method %></td>
+            <td><span class="status-tag status-<%= d.status %>"><%= d.status %></span></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>

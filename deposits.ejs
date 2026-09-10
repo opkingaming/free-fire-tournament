@@ -1,0 +1,52 @@
+<%- include('../partials/header') %>
+
+<section style="padding-top:32px;">
+  <h2>Deposits</h2>
+  <% const active = 'deposits' %>
+  <%- include('../partials/admin-nav') %>
+
+  <div class="filters">
+    <a href="/admin/deposits?status=pending" class="<%= filter === 'pending' ? 'active' : '' %>">Pending</a>
+    <a href="/admin/deposits?status=approved" class="<%= filter === 'approved' ? 'active' : '' %>">Approved</a>
+    <a href="/admin/deposits?status=rejected" class="<%= filter === 'rejected' ? 'active' : '' %>">Rejected</a>
+    <a href="/admin/deposits?status=all" class="<%= filter === 'all' ? 'active' : '' %>">All</a>
+  </div>
+
+  <% if (deposits.length === 0) { %>
+    <p class="section-sub">Nothing here.</p>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr><th>Date</th><th>Player</th><th>Screenshot</th><th>Amount</th><th>Coins</th><th>Method</th><th>Sender #</th><th>Status</th><th></th></tr>
+      </thead>
+      <tbody>
+        <% deposits.forEach(d => { %>
+          <tr>
+            <td><%= new Date(d.createdAt).toLocaleString() %></td>
+            <td><%= d.username %></td>
+            <td><a class="thumb-link" href="<%= d.screenshot %>" target="_blank"><img src="<%= d.screenshot %>" alt="screenshot"></a></td>
+            <td>Rs <%= d.amount %></td>
+            <td><%= d.coins %></td>
+            <td><%= d.method %></td>
+            <td><%= d.senderNumber || '—' %></td>
+            <td><span class="status-tag status-<%= d.status %>"><%= d.status %></span></td>
+            <td>
+              <% if (d.status === 'pending') { %>
+                <div class="inline-form">
+                  <form method="POST" action="/admin/deposits/<%= d.id %>/approve">
+                    <button class="btn btn-primary btn-small" type="submit">Approve</button>
+                  </form>
+                  <form method="POST" action="/admin/deposits/<%= d.id %>/reject">
+                    <button class="btn btn-danger btn-small" type="submit">Reject</button>
+                  </form>
+                </div>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

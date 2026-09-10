@@ -1,0 +1,53 @@
+<%- include('partials/header') %>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">FREE FIRE CUSTOM ROOMS</div>
+    <h1>Play custom 1v1 and BR rooms that actually pay out.</h1>
+    <p>Top up with JazzCash or EasyPaisa, join a room with your coins, and get the room ID &amp; password the moment the match is ready.</p>
+    <div class="hero-cta">
+      <a href="/tournaments" class="btn btn-primary">Browse rooms</a>
+      <a href="/deposit" class="btn btn-ghost">Deposit coins</a>
+    </div>
+  </div>
+</section>
+
+<% if (openRooms.length) { %>
+<section>
+  <h2>Open right now</h2>
+  <p class="section-sub">First come, first served — rooms fill up fast.</p>
+  <div class="grid">
+    <% openRooms.forEach(r => { %>
+      <div class="card room-card">
+        <span class="room-type-tag <%= r.type === 'br' ? 'br' : '' %>"><%= r.type === 'br' ? 'BATTLE ROYALE' : '1v1' %></span>
+        <h3><%= r.title %></h3>
+        <div class="room-meta"><%= new Date(r.startTime).toLocaleString() %></div>
+        <div class="room-meta"><%= r.players.length %><% if (r.maxPlayers) { %>/<%= r.maxPlayers %><% } %> joined</div>
+        <div class="room-fee"><%= r.entryFee %> coins</div>
+        <a href="/tournaments" class="btn btn-ghost btn-small btn-block">View &amp; join</a>
+      </div>
+    <% }) %>
+  </div>
+</section>
+<% } %>
+
+<section>
+  <h2>How it works</h2>
+  <p class="section-sub">Three steps, no waiting on hold.</p>
+  <div class="how-steps">
+    <div class="how-step">
+      <h3>1. Deposit</h3>
+      <p>Send rupees to our JazzCash or EasyPaisa number, then upload your payment screenshot on the Deposit page.</p>
+    </div>
+    <div class="how-step">
+      <h3>2. Get verified</h3>
+      <p>We check your screenshot and add coins to your account — usually within a few minutes.</p>
+    </div>
+    <div class="how-step">
+      <h3>3. Join a room</h3>
+      <p>Spend coins to join any open 1v1 or BR custom room. Room ID &amp; password unlock once you're in.</p>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

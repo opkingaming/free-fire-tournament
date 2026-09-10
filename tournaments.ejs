@@ -1,0 +1,40 @@
+<%- include('partials/header') %>
+
+<section style="padding-top:32px;">
+  <h2>Custom rooms</h2>
+  <p class="section-sub">1v1 duels and full BR custom rooms. Join with coins — entry fee is deducted immediately.</p>
+
+  <% if (error) { %><div class="alert alert-error"><%= error %></div><% } %>
+  <% if (success) { %><div class="alert alert-success"><%= success %></div><% } %>
+
+  <% if (rooms.length === 0) { %>
+    <p class="section-sub">No rooms right now — check back soon.</p>
+  <% } else { %>
+    <div class="grid">
+      <% rooms.forEach(r => { %>
+        <div class="card room-card">
+          <span class="room-type-tag <%= r.type === 'br' ? 'br' : '' %>"><%= r.type === 'br' ? 'BATTLE ROYALE' : '1v1' %></span>
+          <h3><%= r.title %></h3>
+          <div class="room-meta"><%= new Date(r.startTime).toLocaleString() %></div>
+          <div class="room-meta"><%= r.players.length %><% if (r.maxPlayers) { %>/<%= r.maxPlayers %><% } %> joined &middot; <span class="status-tag status-<%= r.status %>"><%= r.status %></span></div>
+          <div class="room-fee"><%= r.entryFee %> coins</div>
+          <% if (currentUser) { %>
+            <% if (r.players.includes(currentUser.id)) { %>
+              <a href="/my-rooms" class="btn btn-ghost btn-small btn-block">View room details</a>
+            <% } else if (r.status === 'open') { %>
+              <form method="POST" action="/tournaments/<%= r.id %>/join">
+                <button class="btn btn-primary btn-small btn-block" type="submit">Join for <%= r.entryFee %> coins</button>
+              </form>
+            <% } else { %>
+              <button class="btn btn-ghost btn-small btn-block" disabled>Not open</button>
+            <% } %>
+          <% } else { %>
+            <a href="/login" class="btn btn-ghost btn-small btn-block">Log in to join</a>
+          <% } %>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>

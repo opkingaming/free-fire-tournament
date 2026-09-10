@@ -1,0 +1,10 @@
+<div class="admin-nav">
+  <a href="/admin" class="<%= typeof active !== 'undefined' && active === 'dashboard' ? 'active' : '' %>">Dashboard</a>
+  <a href="/admin/deposits" class="<%= typeof active !== 'undefined' && active === 'deposits' ? 'active' : '' %>">Deposits</a>
+  <a href="/admin/withdrawals" class="<%= typeof active !== 'undefined' && active === 'withdrawals' ? 'active' : '' %>">Withdrawals</a>
+  <a href="/admin/rooms" class="<%= typeof active !== 'undefined' && active === 'rooms' ? 'active' : '' %>">Rooms</a>
+  <a href="/admin/users" class="<%= typeof active !== 'undefined' && active === 'users' ? 'active' : '' %>">Users</a>
+  <form action="/admin/logout" method="POST" style="margin-left:auto;">
+    <button class="btn btn-ghost btn-small" type="submit">Log out</button>
+  </form>
+</div>

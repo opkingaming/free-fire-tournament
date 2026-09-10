@@ -1,0 +1,78 @@
+<%- include('../partials/header') %>
+
+<section style="padding-top:32px;">
+  <h2>Custom rooms</h2>
+  <% const active = 'rooms' %>
+  <%- include('../partials/admin-nav') %>
+
+  <div class="form-card wide" style="margin:0 0 34px;">
+    <h3 style="margin-top:0;">Create a new room</h3>
+    <form method="POST" action="/admin/rooms">
+      <label for="type">Room type</label>
+      <select id="type" name="type" required>
+        <option value="1v1">1v1</option>
+        <option value="br">Battle Royale (BR)</option>
+      </select>
+
+      <label for="title">Title</label>
+      <input type="text" id="title" name="title" placeholder="e.g. Evening 1v1 Clash Squad" required>
+
+      <label for="entryFee">Entry fee (coins)</label>
+      <input type="number" id="entryFee" name="entryFee" min="0" required>
+
+      <label for="maxPlayers">Max players</label>
+      <input type="number" id="maxPlayers" name="maxPlayers" min="2" placeholder="2 for 1v1, 48 for BR">
+
+      <label for="startTime">Start time</label>
+      <input type="datetime-local" id="startTime" name="startTime" required>
+
+      <label for="roomId">Room ID (optional, can add later)</label>
+      <input type="text" id="roomId" name="roomId">
+
+      <label for="roomPassword">Room password (optional, can add later)</label>
+      <input type="text" id="roomPassword" name="roomPassword">
+
+      <button class="btn btn-primary btn-block" type="submit" style="margin-top:22px;">Create room</button>
+    </form>
+  </div>
+
+  <% if (rooms.length === 0) { %>
+    <p class="section-sub">No rooms created yet.</p>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr><th>Title</th><th>Type</th><th>Start</th><th>Fee</th><th>Players</th><th>Room ID / PW</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <% rooms.forEach(r => { %>
+          <tr>
+            <td><%= r.title %></td>
+            <td><%= r.type === 'br' ? 'BR' : '1v1' %></td>
+            <td><%= new Date(r.startTime).toLocaleString() %></td>
+            <td><%= r.entryFee %></td>
+            <td><%= r.playerCount %><% if (r.maxPlayers) { %>/<%= r.maxPlayers %><% } %></td>
+            <td>
+              <form method="POST" action="/admin/rooms/<%= r.id %>/update-credentials" class="inline-form">
+                <input type="text" name="roomId" value="<%= r.roomId %>" placeholder="Room ID" style="width:90px;">
+                <input type="text" name="roomPassword" value="<%= r.roomPassword %>" placeholder="Password" style="width:90px;">
+                <button class="btn btn-ghost btn-small" type="submit">Save</button>
+              </form>
+            </td>
+            <td>
+              <form method="POST" action="/admin/rooms/<%= r.id %>/status" class="inline-form">
+                <select name="status" style="width:110px;">
+                  <option value="open" <%= r.status === 'open' ? 'selected' : '' %>>Open</option>
+                  <option value="closed" <%= r.status === 'closed' ? 'selected' : '' %>>Closed</option>
+                  <option value="cancelled" <%= r.status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+                </select>
+                <button class="btn btn-ghost btn-small" type="submit">Set</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

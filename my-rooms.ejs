@@ -1,0 +1,28 @@
+<%- include('partials/header') %>
+
+<section style="padding-top:32px;">
+  <h2>My rooms</h2>
+  <p class="section-sub">Room ID and password appear here once the admin sets them.</p>
+
+  <% if (myRooms.length === 0) { %>
+    <p class="section-sub">You haven't joined any rooms yet. <a href="/tournaments">Browse open rooms</a>.</p>
+  <% } else { %>
+    <div class="grid">
+      <% myRooms.forEach(r => { %>
+        <div class="card room-card">
+          <span class="room-type-tag <%= r.type === 'br' ? 'br' : '' %>"><%= r.type === 'br' ? 'BATTLE ROYALE' : '1v1' %></span>
+          <h3><%= r.title %></h3>
+          <div class="room-meta"><%= new Date(r.startTime).toLocaleString() %></div>
+          <% if (r.roomId) { %>
+            <div class="room-meta">Room ID: <strong><%= r.roomId %></strong></div>
+            <div class="room-meta">Password: <strong><%= r.roomPassword %></strong></div>
+          <% } else { %>
+            <div class="room-meta">Room ID &amp; password not posted yet — check back closer to start time.</div>
+          <% } %>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>
